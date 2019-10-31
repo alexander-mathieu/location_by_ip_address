@@ -19,8 +19,20 @@ RSpec.describe 'locationByIp endpoint', type: :request do
     end
   end
 
+  describe 'with a no IP address' do
+    it 'returns a 400 error' do
+      get '/api/v1/locationByIp'
+
+      error = JSON.parse(response.body, symbolize_names: true)[:error]
+
+      expect(response.status).to eq(400)
+
+      expect(error).to eq('Please provide an IP address as a query parameter.')
+    end
+  end
+
   describe 'with an invalid IP address' do
-    it 'returns an error' do
+    it 'returns a 400 error' do
       ipv6_address = 'FE80:CD00:0000:0CDE:1257:0000:211E:729C'
 
       get '/api/v1/locationByIp', params: { ip: ipv6_address }

@@ -18,4 +18,18 @@ RSpec.describe 'locationByIp endpoint', type: :request do
       expect(location_by_ip[:processingCode]).to eq('United States - Florida - Venice')
     end
   end
+
+  describe 'with an invalid IP address' do
+    it 'returns an error' do
+      ipv6_address = 'FE80:CD00:0000:0CDE:1257:0000:211E:729C'
+
+      get '/api/v1/locationByIp', params: { ip: ipv6_address }
+
+      error = JSON.parse(response.body, symbolize_names: true)[:error]
+
+      expect(response.status).to eq(400)
+
+      expect(error).to eq('Please provide an address with valid IPv4 formatting.')
+    end
+  end
 end

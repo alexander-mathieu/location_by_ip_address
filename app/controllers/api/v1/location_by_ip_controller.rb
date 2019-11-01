@@ -2,7 +2,7 @@ class Api::V1::LocationByIpController < ApplicationController
   before_action :validate_ip_address, only: :index
 
   def index
-    facade = LocationByIpFacade.new(params[:ip])
+    facade = LocationByIpFacade.new(params['ip'])
     location_serializer = LocationByIpSerializer.new(facade.location_info)
     render json: location_serializer.format_response
   end
